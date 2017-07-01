@@ -1,0 +1,42 @@
+# A sample file to specify the target asset allocation
+
+# Define what currencty should be used for deposits and withdrawals
+fiat_currency: USD
+
+# how much value (in your specified fiat currency) a transaction to another address needs to have
+# in order to minimize the transaction cost. The tool will not propose transactions below that value.
+minimum_transaction_value: 100
+
+# A list of all the assets you would like to hold.
+# Each asset needs the following attributes:
+#   name            - The name of the asset
+#   quote_currency  - What currency should be used to buy the asset
+#   exchange        - The name of the exchange where to buy the asset
+#   weight          - How much weight the asset should have compared to the other assets
+#   storage         - Where you want to store the asset. This can be "exchange" or "wallet"
+# 
+# A note on the weight of the assets:
+# The weight can be any float number, e.g. it could represent a value in percent or a rating from 1 to 10.
+# The tool will calculate the sum of the weights and then distribute the value of the blockfolio
+# accordingly by dividing each assets weight by the sum of all assets weights.
+assets:
+  - name: BTC
+    quote_currency: USD
+    exchange: GDAX
+    weight: 25
+    storage: wallet
+  - name: ETH
+    quote_currency: USD
+    exchange: GDAX
+    weight: 50
+    storage: wallet
+  - name: STRAT
+    quote_currency: BTC
+    exchange: Poloniex
+    weight: 15
+    storage: exchange
+  - name: GNT
+    quote_currency: ETH
+    exchange: Poloniex
+    weight: 10
+    storage: wallet
