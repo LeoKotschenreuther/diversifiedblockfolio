@@ -1,24 +1,21 @@
 # A sample file to specify the current holdings of the blockfolio
 
 # A list of all the assets you hold right now in different locations (at exchanges or in wallets).
-# Each holding is compromised of the location which is specified by a simple name and a list of the
-# assets that are held there. Each asset has also a name and an amount.
-holdings:
-  - location: GDAX
-    assets:
-      - name: USD
-        amount: 1000
-  - location: Poloniex
-    assets:
-      - name: ETH
-        amount: 1
-  - location: Wallet
-    assets:
-      - name: BTC
-        amount: .1
-      - name: ETH
-        amount: 1
-      - name: GNT
-        amount: 10
-      - name: STRAT
-        amount: 10
+# Each asset is compromised of a name and a list of locations and the amount you hold in the location.
+assets:
+  - name: USD
+    locations:
+      - GDAX: 1000
+  - name: BTC
+    locations:
+      - Wallet: .1
+  - name: ETH
+    locations:
+      - Poloniex: 1
+      - Wallet: 1
+  - name: GNT
+    locations:
+      - Wallet: 10
+  - name: STRAT
+    locations:
+      - Wallet: 10
