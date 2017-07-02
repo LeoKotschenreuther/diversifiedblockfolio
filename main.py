@@ -96,39 +96,50 @@ class Blockfolio:
 		fiat_actions = [action for action in aggregated_actions if action['quote_symbol'] == self.fiat['symbol']]
 		non_fiat_actions = [action for action in aggregated_actions if action['quote_symbol'] != self.fiat['symbol']]
 		transfer_symbols = set([action['quote_symbol'] for action in non_fiat_actions])
+		all_transfers = list()
 		for action in fiat_actions:
 			print(action)
 			asset = next(asset for asset in self.assets if asset['name'] == action['symbol'])
-			if asset['storage'] == "Wallet" or action['symbol'] in transfer_symbols:
-				transfers = []
-				print("How much " + action['symbol'] + " did you buy?")
-				bought_amount = float(input(""))
-				future_actions = [item for item in non_fiat_actions if item['quote_symbol'] == action['symbol']]
-				for a in future_actions:
-					transfers.append({
-						'symbol': action['symbol'],
-						'value': a['value'],
-						'from': asset['exchange'],
-						'to': a['location']
-					})
-				aggregated_transfers = self._aggregate_transfers(transfers)
-				wallet_value = 0
-				if asset['locations']:
-					wallet_amount = next((location['amount'] for location in asset['locations']
-											if location['name'] == "Wallet"), 0)
-					wallet_value = wallet_amount * asset['price']
-				aggregated_transfers.append({
+			if asset['storage'] != "Wallet" and action['symbol'] not in transfer_symbols:
+				continue
+			transfers = []
+			print("How much " + action['symbol'] + " did you buy?")
+			bought_amount = float(input(""))
+			future_actions = [item for item in non_fiat_actions if item['quote_symbol'] == action['symbol']]
+			for a in future_actions:
+				transfers.append({
 					'symbol': action['symbol'],
-					'value': asset['wanted_value'] - wallet_value,
+					'value': a['value'],
 					'from': asset['exchange'],
-					'to': "Wallet"
+					'to': a['location']
 				})
-				total_transfer_value = sum(t['value'] for t in aggregated_transfers)
-				for transfer in aggregated_transfers:
-					transfer['amount'] = transfer['value'] / total_transfer_value * bought_amount
-					print(transfer)
-		# for action in non_fiat_actions:
-			
+			aggregated_transfers = self._aggregate_transfers(transfers)
+			wallet_value = 0
+			if asset['locations']:
+				wallet_amount = next((location['amount'] for location in asset['locations']
+										if location['name'] == "Wallet"), 0)
+				wallet_value = wallet_amount * asset['price']
+			aggregated_transfers.append({
+				'symbol': action['symbol'],
+				'value': asset['wanted_value'] - wallet_value,
+				'from': asset['exchange'],
+				'to': "Wallet"
+			})
+			total_transfer_value = sum(t['value'] for t in aggregated_transfers)
+			for transfer in aggregated_transfers:
+				transfer['amount'] = transfer['value'] / total_transfer_value * bought_amount
+				print(transfer)
+			all_transfers = all_transfers + aggregated_transfers
+		for transfer in all_transfers:
+			if transfer['to'] == 'Wallet':
+				continue
+			actions = [action for action in non_fiat_actions
+				if action['quote_symbol'] == transfer['symbol'] and action['location'] == transfer['to']]
+			total_value = sum([action['value'] for action in actions])
+			for action in actions:
+				action['amount'] = transfer['amount'] * action['value'] / total_value
+				print(action)
+
 
 
 if __name__ == "__main__":
