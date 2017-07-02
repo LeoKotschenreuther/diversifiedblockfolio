@@ -1,21 +1,65 @@
-# A sample file to specify the current holdings of the blockfolio
+# A sample file to specify the current holdings of the blockfolio and target allocations
 
-# A list of all the assets you hold right now in different locations (at exchanges or in wallets).
-# Each asset is compromised of a name and a list of locations and the amount you hold in the location.
+# Define what currencty should be used for deposits and withdrawals and how big the deposit or withdrawal should be.
+# A positive amount is a deposit and a negative amount is a withdrawal.
+fiat:
+  symbol: USD
+  amount: 1000
+  location: GDAX
+
+# how much value (in your specified fiat currency) a transaction to another address needs to have
+# in order to minimize the transaction cost. The tool will not propose transactions below that value.
+minimum_transaction_value: 100
+
+exchanges: [GDAX, Poloniex]
+
+# A list of all the assets you would like to hold or already hold.
+# Each asset needs the following attributes:
+#   name            - The name of the asset
+#   quote_symbol    - What currency should be used to buy the asset
+#   exchange        - The name of the exchange where to buy the asset
+#   weight          - How much weight the asset should have compared to the other assets
+#   storage         - Where you want to store the asset. This can be "exchange" or "wallet"
+# 
+# the following parameter is optional:
+#   locations       - a list of locations where you hold the asset
+# 
+# A note on the weight of the assets:
+# The weight can be any float number, e.g. it could represent a value in percent or a rating from 1 to 10.
+# The tool will calculate the sum of the weights and then distribute the value of the blockfolio
+# accordingly by dividing each assets weight by the sum of all assets weights.
 assets:
-  - name: USD
-    locations:
-      - GDAX: 1000
   - name: BTC
+    quote_symbol: USD
+    exchange: GDAX
+    weight: 25
+    storage: wallet
     locations:
-      - Wallet: .1
+      - name: Wallet
+        amount: .1
   - name: ETH
+    quote_symbol: USD
+    exchange: GDAX
+    weight: 50
+    storage: wallet
     locations:
-      - Poloniex: 1
-      - Wallet: 1
-  - name: GNT
-    locations:
-      - Wallet: 10
+      - name: Poloniex
+        amount: 1
+      - name: Wallet:
+        amount: 1
   - name: STRAT
+    quote_symbol: BTC
+    exchange: Poloniex
+    weight: 15
+    storage: exchange
     locations:
-      - Wallet: 10
+      - name: Wallet
+        amount: 10
+  - name: GNT
+    quote_symbol: ETH
+    exchange: Poloniex
+    weight: 10
+    storage: wallet
+    locations:
+      - name: Wallet
+        amount: 10
