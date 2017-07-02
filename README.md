@@ -9,3 +9,39 @@ Investing in more than a couple of different blockchain assets can be quite tedi
 * Deposits
 * Rebalance
 * Withdrawals
+
+## Dependencies
+
+The few dependencies are [Python3](https://www.python.org/download/releases/3.0/) and a couple of python packages. It helps to set up a [virtualenv](http://python-guide-pt-br.readthedocs.io/en/latest/dev/virtualenvs/) first. The following instructions assume that you have already installed Python which nowadays come with pip automatically. Start with installing virtualenv and then create a virtual environment in this folder:
+
+```sh
+pip install virtualenv
+virtualenv -p python3 .venv
+```
+
+Now activate the virtual environment with:
+
+```sh
+source .venv/bin/activate
+```
+
+Finally install the python packages with pip and you are good to go:
+
+```sh
+pip install -r requirements.txt
+```
+
+## Running the code
+
+Copy the `sample_data` folder, name the copy `data` and adjust the `blockfolio.yaml` file to your needs.
+
+As of now, the code is very simple and only works for one specific use case. That use case is when you have extra funding in your preferred fiat currency available and you also plan on buying more of all of your current holdings.
+
+The code then prints the buy actions and sometimes asks how much of an asset you just bought. It also includes instructions for when you need to transfer assets from one exchange to another one.
+
+Run the code with:
+
+```sh
+python main.py
+```
+
