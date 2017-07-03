@@ -12,7 +12,7 @@ Investing in more than a couple of different blockchain assets can be quite tedi
 
 ## Dependencies
 
-The few dependencies are [Python3](https://www.python.org/download/releases/3.0/) and a couple of python packages. It helps to set up a [virtualenv](http://python-guide-pt-br.readthedocs.io/en/latest/dev/virtualenvs/) first. The following instructions assume that you have already installed Python which nowadays come with pip automatically. Start with installing virtualenv and then create a virtual environment in this folder:
+The few dependencies are [Python3](https://www.python.org/download/releases/3.0/) and a couple of python packages. It helps to set up a [virtualenv](http://python-guide-pt-br.readthedocs.io/en/latest/dev/virtualenvs/) first. The following instructions assume that you have already installed Python which nowadays comes with pip automatically. Start with installing virtualenv and then create a virtual environment in this folder:
 
 ```sh
 pip install virtualenv
@@ -42,6 +42,5 @@ The code then prints the buy actions and sometimes asks how much of an asset you
 Run the code with:
 
 ```sh
-python main.py
+python main.py [-h] {deposit,withdraw} amount
 ```
-

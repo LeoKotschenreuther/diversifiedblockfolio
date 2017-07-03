@@ -1,5 +1,6 @@
 from coinmarketcap import Market
 import yaml
+import argparse
 
 coinmarketcap = Market()
 
@@ -140,12 +141,27 @@ class Blockfolio:
 				action['amount'] = transfer['amount'] * action['value'] / total_value
 				print(action)
 
+	def deposit(self, fiat_amount):
+		self.aggregate_amounts()
+		self.calculate_values()
+		self.calculate_total_value()
+		self.calculate_wanted_values_and_changes()
+		self.plan_rebalance()
 
+	def withdraw(self, fiat_amount):
+		return
+
+	def rebalance(self):
+		return
 
 if __name__ == "__main__":
 	blockfolio = Blockfolio(load_yaml("data/blockfolio.yaml"))
-	blockfolio.aggregate_amounts()
-	blockfolio.calculate_values()
-	blockfolio.calculate_total_value()
-	blockfolio.calculate_wanted_values_and_changes()
-	blockfolio.plan_rebalance()
+	parser = argparse.ArgumentParser(description='Deposits and Withdrawals for a Blockfolio')
+	parser.add_argument('action', choices=['deposit', 'withdraw'])
+	parser.add_argument('amount', type=float)
+
+	args = parser.parse_args()
+	if args.action == 'deposit':
+		blockfolio.deposit(args.amount)
+	elif args.action == 'withdraw':
+		blockfolio.withdraw(args.amount)
