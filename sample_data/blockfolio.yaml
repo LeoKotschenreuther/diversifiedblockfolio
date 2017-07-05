@@ -4,12 +4,16 @@
 ###############################################################################
 
 ###############################################################################
+# The symbol of the fiat currency that will be used for deposits and
+# withdrawals, e.g. EUR or USD
+###############################################################################
+fiat_symbol: USD
+
+###############################################################################
 # The definition of the exchange where you would like to exchange into and
 # from your preferred fiat currency. It should have the following attributes:
 # 
 # - name: The name of the exchange
-# - fiat_symbol: The symbol of your preferred fiat currency, could be
-#                something like USD or EUR
 # - holding_products: What products the exchange can store
 # - trading_pairs: What currencies you can trade agains each other. There is
 #                  no need to write down both directions of a trade.
@@ -19,7 +23,6 @@
 ###############################################################################
 fiat_exchange:
   name: GDAX
-  fiat_symbol: USD
   holding_products:
     - symbol: BTC
     - symbol: ETH
