@@ -1,6 +1,6 @@
-# modern-blockfolio
+# Diversified Blockfolio
 
-A tool to simplify investments in a diversified portfolio of blockchain coins and tokes.
+A tool to simplify investments in a diversified portfolio of blockchain assets.
 
 ## Idea
 
