@@ -1,65 +1,132 @@
-# A sample file to specify the current holdings of the blockfolio and target allocations
+###############################################################################
+# A sample file to specify all the necessary data that is needed to make use
+# of the modern blockfolio.
+###############################################################################
 
-# Define what currencty should be used for deposits and withdrawals and how big the deposit or withdrawal should be.
-# A positive amount is a deposit and a negative amount is a withdrawal.
-fiat:
-  symbol: USD
-  amount: 1000
-  location: GDAX
+###############################################################################
+# The symbol of the fiat currency that will be used for deposits and
+# withdrawals, e.g. EUR or USD
+# Get's ignored for now.
+###############################################################################
+# fiat_symbol: USD
 
-# how much value (in your specified fiat currency) a transaction to another address needs to have
-# in order to minimize the transaction cost. The tool will not propose transactions below that value.
-minimum_transaction_value: 100
-
-exchanges: [GDAX, Poloniex]
-
-# A list of all the assets you would like to hold or already hold.
-# Each asset needs the following attributes:
-#   name            - The name of the asset
-#   quote_symbol    - What currency should be used to buy the asset
-#   exchange        - The name of the exchange where to buy the asset
-#   weight          - How much weight the asset should have compared to the other assets
-#   storage         - Where you want to store the asset. This can be "exchange" or "wallet"
+###############################################################################
+# The definition of the exchange where you would like to exchange into and
+# from your preferred fiat currency. It should have the following attributes:
 # 
-# the following parameter is optional:
-#   locations       - a list of locations where you hold the asset
+# - name: The name of the exchange
+# - holding_products: What products the exchange can store
+# - trading_pairs: What currencies you can trade agains each other. There is
+#                  no need to write down both directions of a trade.
+# - holdings: (optional) What assets and how much of them you currently store
+#                        at the exchange
 # 
-# A note on the weight of the assets:
-# The weight can be any float number, e.g. it could represent a value in percent or a rating from 1 to 10.
-# The tool will calculate the sum of the weights and then distribute the value of the blockfolio
-# accordingly by dividing each assets weight by the sum of all assets weights.
-assets:
-  - name: BTC
-    quote_symbol: USD
-    exchange: GDAX
-    weight: 25
-    storage: wallet
-    locations:
-      - name: Wallet
-        amount: .1
-  - name: ETH
-    quote_symbol: USD
-    exchange: GDAX
-    weight: 50
-    storage: wallet
-    locations:
-      - name: Poloniex
-        amount: 1
-      - name: Wallet:
-        amount: 1
-  - name: STRAT
-    quote_symbol: BTC
-    exchange: Poloniex
-    weight: 15
-    storage: exchange
-    locations:
-      - name: Wallet
-        amount: 10
-  - name: GNT
-    quote_symbol: ETH
-    exchange: Poloniex
-    weight: 10
-    storage: wallet
-    locations:
-      - name: Wallet
-        amount: 10
+# Only the holdings get used for now.
+###############################################################################
+fiat_exchange:
+  # name: GDAX
+  # holding_products:
+  #   - symbol: BTC
+  #   - symbol: ETH
+  #   - symbol: LTC
+  # trading_pairs:
+  #   - USD: [BTC, ETH, LTC]
+  holdings:
+    - symbol: BTC
+      amount: 1
+
+###############################################################################
+# Almost the same as the fiat_exchange except that there can be more than just
+# one and that they are not used for fiat transactions nor for fiat storage.
+# Each exchange should have the following attributes:
+# 
+# - name: The name of the exchange
+# - holding_products: What products the exchange can store
+# - trading_pairs: What currencies you can trade agains each other. There is
+#                  no need to write down both directions of a trade.
+# - holdings: (optional) What assets and how much of them you currently store
+#                        at the exchange
+# 
+# Get's ignored for now
+###############################################################################
+# non_fiat_exchanges:
+#   - name: Poloniex
+#     holding_products:
+#       - symbol: BTC
+#       - symbol: ETH
+#       - symbol: GNT
+#       - symbol: STRAT
+#     trading_pairs:
+#       - BTC: [STRAT]
+#       - ETH: [GNT]
+#     holdings:
+#       - symbol: STRAT
+#         amount: 100
+
+###############################################################################
+# Wallets look a lot like the exchanges except that they don't offer the
+# possibility to trade assets.
+# Each wallet should have the following attributes:
+# 
+# - name: The name of the wallet
+# - holding_products: What products the exchange can store
+# - holdings: (optional) What assets and how much of them you currently store
+#                        in the wallet
+# 
+# Gets ignored for now
+###############################################################################
+# wallets:
+#   - name: My BTC Wallet
+#     holding_products:
+#       - symbol: BTC
+#     holdings:
+#       - symbol: BTC
+#         amount: 1
+#   - name: My ETH Wallet
+#     holding_products:
+#       - symbol: ETH
+#       - symbol: GNT
+#     holdings:
+#       - symbol: ETH
+#         amount: 5
+#       - symbol: GNT
+#         amount: 3
+
+###############################################################################
+# A list of all the Assets you would like to hold. Each asset should have the
+# following attributes:
+# 
+# - symbol: The symbol of the asset that is also used on coinmarketcap,
+#           something like ETH or BTC
+# - quote_symbol: What other asset (specified through its symbol) you want to
+#                 use to buy the actual asset
+# - preferred_exchange: Where you usually want to trade the asset
+# - target_weight: How much weight the asset should have compared to the other
+#                  assets in your blockfolio.
+# - preferred_storage: The Exchange or Wallet where you want to store your
+#                      assets
+# 
+# A note on the weights of the assets:
+# The weight can be any float number, e.g. it could represent a value in
+# percent or a rating from 1 to 10. The Blockfolio tool will calculate the sum
+# of the weights and then distribute the value of the blockfolio accordingly
+# by dividing each assets weight by the sum of all assets weights.
+# 
+# Only useing the symbol for now
+###############################################################################
+asset_allocation:
+  - symbol: BTC
+    # quote_symbol: USD
+    # preferred_exchange: GDAX
+    # target_weight: 25
+    # preferred_storage: My BTC Wallet
+  - symbol: ETH
+    # quote_symbol: USD
+    # preferred_exchange: GDAX
+    # target_weight: 50
+    # preferred_storage: My ETH Wallet
+  - symbol: LTC
+    # quote_symbol: USD
+    # preferred_exchange: Poloniex
+    # target_weight: 10
+    # preferred_storage: My ETH Wallet

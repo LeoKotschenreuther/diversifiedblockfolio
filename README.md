@@ -12,7 +12,7 @@ Investing in more than a couple of different blockchain assets can be quite tedi
 
 ## Dependencies
 
-The few dependencies are [Python3](https://www.python.org/download/releases/3.0/) and a couple of python packages. It helps to set up a [virtualenv](http://python-guide-pt-br.readthedocs.io/en/latest/dev/virtualenvs/) first. The following instructions assume that you have already installed Python which nowadays comes with pip automatically. Start with installing virtualenv and then create a virtual environment in this folder:
+The few dependencies are [Python3](https://www.python.org/download/releases/3.0/) and a couple of python packages. It helps to set up a [virtualenv](http://python-guide-pt-br.readthedocs.io/en/latest/dev/virtualenvs/) first. The following instructions assume that you have already installed Python which nowadays comes automatically with pip. Start with installing virtualenv and then create a virtual environment in this folder:
 
 ```sh
 pip install virtualenv
@@ -29,6 +29,14 @@ Finally install the python packages with pip and you are good to go:
 
 ```sh
 pip install -r requirements.txt
+```
+
+## Tests
+
+Run pytest through the proper python binary in the virtualenv:
+
+```sh
+python -m pytest
 ```
 
 ## Running the code
