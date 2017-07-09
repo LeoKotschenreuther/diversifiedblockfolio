@@ -22,15 +22,16 @@ fiat_symbol: USD
 # 
 ###############################################################################
 fiat_exchange:
-  name: GDAX
-  holding_products:
-    - symbol: BTC
-    - symbol: ETH
-  trading_pairs:
-    - USD: [BTC, ETH]
-  # holdings:
+  # name: GDAX
+  # holding_products:
   #   - symbol: BTC
-  #     amount: 1
+  #   - symbol: ETH
+  #   - symbol: LTC
+  # trading_pairs:
+  #   - USD: [BTC, ETH, LTC]
+  holdings:
+    - symbol: BTC
+      amount: 1
 
 ###############################################################################
 # Almost the same as the fiat_exchange except that there can be more than just

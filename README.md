@@ -33,10 +33,10 @@ pip install -r requirements.txt
 
 ## Tests
 
-Simply run pytest:
+Run pytest through the proper python binary in the virtualenv:
 
 ```sh
-pytest
+python -m pytest
 ```
 
 ## Running the code
