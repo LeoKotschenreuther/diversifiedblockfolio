@@ -6,8 +6,9 @@
 ###############################################################################
 # The symbol of the fiat currency that will be used for deposits and
 # withdrawals, e.g. EUR or USD
+# Get's ignored for now.
 ###############################################################################
-fiat_symbol: USD
+# fiat_symbol: USD
 
 ###############################################################################
 # The definition of the exchange where you would like to exchange into and
@@ -20,6 +21,7 @@ fiat_symbol: USD
 # - holdings: (optional) What assets and how much of them you currently store
 #                        at the exchange
 # 
+# Only the holdings get used for now.
 ###############################################################################
 fiat_exchange:
   # name: GDAX
@@ -45,20 +47,21 @@ fiat_exchange:
 # - holdings: (optional) What assets and how much of them you currently store
 #                        at the exchange
 # 
+# Get's ignored for now
 ###############################################################################
-non_fiat_exchanges:
-  - name: Poloniex
-    holding_products:
-      - symbol: BTC
-      - symbol: ETH
-      - symbol: GNT
-      - symbol: STRAT
-    trading_pairs:
-      - BTC: [STRAT]
-      - ETH: [GNT]
-    holdings:
-      - symbol: STRAT
-        amount: 100
+# non_fiat_exchanges:
+#   - name: Poloniex
+#     holding_products:
+#       - symbol: BTC
+#       - symbol: ETH
+#       - symbol: GNT
+#       - symbol: STRAT
+#     trading_pairs:
+#       - BTC: [STRAT]
+#       - ETH: [GNT]
+#     holdings:
+#       - symbol: STRAT
+#         amount: 100
 
 ###############################################################################
 # Wallets look a lot like the exchanges except that they don't offer the
@@ -70,23 +73,24 @@ non_fiat_exchanges:
 # - holdings: (optional) What assets and how much of them you currently store
 #                        in the wallet
 # 
+# Gets ignored for now
 ###############################################################################
-wallets:
-  - name: My BTC Wallet
-    holding_products:
-      - symbol: BTC
-    holdings:
-      - symbol: BTC
-        amount: 1
-  - name: My ETH Wallet
-    holding_products:
-      - symbol: ETH
-      - symbol: GNT
-    holdings:
-      - symbol: ETH
-        amount: 5
-      - symbol: GNT
-        amount: 3
+# wallets:
+#   - name: My BTC Wallet
+#     holding_products:
+#       - symbol: BTC
+#     holdings:
+#       - symbol: BTC
+#         amount: 1
+#   - name: My ETH Wallet
+#     holding_products:
+#       - symbol: ETH
+#       - symbol: GNT
+#     holdings:
+#       - symbol: ETH
+#         amount: 5
+#       - symbol: GNT
+#         amount: 3
 
 ###############################################################################
 # A list of all the Assets you would like to hold. Each asset should have the
@@ -108,25 +112,21 @@ wallets:
 # of the weights and then distribute the value of the blockfolio accordingly
 # by dividing each assets weight by the sum of all assets weights.
 # 
+# Ignore for now
 ###############################################################################
-asset_allocation:
-  - symbol: BTC
-    quote_symbol: USD
-    preferred_exchange: GDAX
-    target_weight: 25
-    preferred_storage: My BTC Wallet
-  - symbol: ETH
-    quote_symbol: USD
-    preferred_exchange: GDAX
-    target_weight: 50
-    preferred_storage: My ETH Wallet
-  - symbol: GNT
-    quote_symbol: ETH
-    preferred_exchange: Poloniex
-    target_weight: 10
-    preferred_storage: My ETH Wallet
-  - symbol: STRAT
-    quote_symbol: BTC
-    preferred_exchange: Poloniex
-    target_weight: 15
-    preferred_storage: Poloniex
+# asset_allocation:
+  # - symbol: BTC
+    # quote_symbol: USD
+    # preferred_exchange: GDAX
+    # target_weight: 25
+    # preferred_storage: My BTC Wallet
+  # - symbol: ETH
+    # quote_symbol: USD
+    # preferred_exchange: GDAX
+    # target_weight: 50
+    # preferred_storage: My ETH Wallet
+  # - symbol: LTC
+    # quote_symbol: USD
+    # preferred_exchange: Poloniex
+    # target_weight: 10
+    # preferred_storage: My ETH Wallet
