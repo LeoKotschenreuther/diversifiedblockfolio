@@ -112,20 +112,20 @@ fiat_exchange:
 # of the weights and then distribute the value of the blockfolio accordingly
 # by dividing each assets weight by the sum of all assets weights.
 # 
-# Ignore for now
+# Only useing the symbol for now
 ###############################################################################
-# asset_allocation:
-  # - symbol: BTC
+asset_allocation:
+  - symbol: BTC
     # quote_symbol: USD
     # preferred_exchange: GDAX
     # target_weight: 25
     # preferred_storage: My BTC Wallet
-  # - symbol: ETH
+  - symbol: ETH
     # quote_symbol: USD
     # preferred_exchange: GDAX
     # target_weight: 50
     # preferred_storage: My ETH Wallet
-  # - symbol: LTC
+  - symbol: LTC
     # quote_symbol: USD
     # preferred_exchange: Poloniex
     # target_weight: 10
