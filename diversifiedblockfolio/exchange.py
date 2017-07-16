@@ -4,9 +4,11 @@ KEY_SYMBOL = 'symbol'
 
 
 class Exchange(object):
-    def __init__(self, exchange_data):
-        holdings = exchange_data.get(KEY_HOLDINGS, [])
+    def __init__(self, exchange_data=None):
         self._holdings = {}
+        if not exchange_data:
+            return
+        holdings = exchange_data.get(KEY_HOLDINGS, [])
         for holding in holdings:
             symbol = holding.get(KEY_SYMBOL, '')
             if not symbol:

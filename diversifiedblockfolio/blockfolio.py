@@ -3,7 +3,6 @@ KEY_CMC_PRICE_FIAT = 'price_usd'
 KEY_HOLDINGS = 'holdings'
 KEY_PRICE = 'price'
 KEY_SYMBOL = 'symbol'
-KEY_TARGETWEIGHT = 'target_weight'
 KEY_VALUE = 'value'
 TICKER_LIMIT = 100
 
@@ -11,13 +10,6 @@ TICKER_LIMIT = 100
 class Blockfolio:
 
     def __init__(self, fiat_exchange, asset_allocation, market):
-        for holding in fiat_exchange.get(KEY_HOLDINGS, []):
-            symbol = holding.get(KEY_SYMBOL, '')
-            if not symbol:
-                raise ValueError("A holding needs a symbol")
-            amount = holding.get(KEY_AMOUNT, 0)
-            if amount < 0:
-                raise ValueError("A holding needs an amount >= 0")
         self._fiat_exchange = fiat_exchange
         if not asset_allocation:
             raise ValueError("The asset allocation needs at least one asset")
@@ -25,9 +17,6 @@ class Blockfolio:
             symbol = allocation.get(KEY_SYMBOL, '')
             if not symbol:
                 raise ValueError("An allocation needs a symbol")
-            target_weight = allocation.get(KEY_TARGETWEIGHT, 0)
-            if target_weight <= 0:
-                raise ValueError("An allocation needs a target weight > 0")
         self._asset_allocation = asset_allocation
         self._market = market
 
@@ -37,12 +26,12 @@ class Blockfolio:
 
     def _holding_amount(self, symbol, exchange):
         return next((holding.get(KEY_AMOUNT, 0) for holding
-                     in exchange.get(KEY_HOLDINGS, [])
+                     in exchange.holdings
                      if holding[KEY_SYMBOL] == symbol),
                     0)
 
     def value(self):
-        holdings = self._fiat_exchange.get(KEY_HOLDINGS, [])
+        holdings = self._fiat_exchange.holdings
         if len(holdings) == 0:
             return 0
         ticker = self._market.ticker(limit=TICKER_LIMIT)
@@ -65,3 +54,6 @@ class Blockfolio:
             holding[KEY_VALUE] = holding[KEY_AMOUNT] * holding[KEY_PRICE]
             holdings.append(holding)
         return holdings
+
+    # def deposit(self, amount):
+    #     return
