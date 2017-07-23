@@ -1,6 +1,8 @@
 KEY_AMOUNT = 'amount'
 KEY_HOLDINGS = 'holdings'
 KEY_SYMBOL = 'symbol'
+SIDE_BUY = 'buy'
+SIDE_SELL = 'sell'
 
 
 class Exchange(object):
@@ -20,19 +22,37 @@ class Exchange(object):
                 raise ValueError("A holding needs an amount >= 0")
             self._holdings[symbol] = holding
 
-    def buy(self, symbol, quote_symbol, quote_amount):
-        if (quote_symbol not in self._holdings or
-                self._holdings[quote_symbol].get(KEY_AMOUNT) < quote_amount):
-            raise ValueError("There is not enough supply of {}"
-                             .format(quote_symbol))
-        print("Go ahead and use {} {} in order to buy {}."
-              .format(quote_amount, quote_symbol, symbol))
-        print("How much {} did you get?".format(symbol))
-        symbol_amount = float(input())
-        self._holdings[quote_symbol][KEY_AMOUNT] -= quote_amount
-        if symbol not in self._holdings:
-            self._holdings[symbol] = {KEY_SYMBOL: symbol, KEY_AMOUNT: 0}
-        self._holdings[symbol][KEY_AMOUNT] += symbol_amount
+    def _enough_available(self, symbol, amount):
+        if (symbol not in self._holdings or
+                self._holdings[symbol].get(KEY_AMOUNT) < amount):
+            return False
+        return True
+
+    def _exchange(self, want_symbol, give_symbol, amount, side):
+        if not self._enough_available(give_symbol, amount):
+            raise ValueError("There is not enough sypply of {}."
+                             .format(give_symbol))
+        if side == SIDE_SELL:
+            print("Go ahead and sell {} {} for {}."
+                  .format(amount, give_symbol, want_symbol))
+        elif side == SIDE_BUY:
+            print("Go ahead and buy {} with {} {}."
+                  .format(want_symbol, amount, give_symbol))
+        print("How much {} did you get?".format(want_symbol))
+        want_amount = float(input())
+        self._holdings[give_symbol][KEY_AMOUNT] -= amount
+        if want_symbol not in self._holdings:
+            self._holdings[want_symbol] = {
+                KEY_SYMBOL: want_symbol,
+                KEY_AMOUNT: 0
+            }
+        self._holdings[want_symbol][KEY_AMOUNT] += want_amount
+
+    def buy(self, buy_symbol, give_symbol, give_amount):
+        self._exchange(buy_symbol, give_symbol, give_amount, SIDE_BUY)
+
+    def sell(self, sell_symbol, want_symbol, sell_amount):
+        self._exchange(want_symbol, sell_symbol, sell_amount, SIDE_SELL)
 
     @property
     def holdings(self):
