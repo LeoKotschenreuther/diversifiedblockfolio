@@ -1,12 +1,12 @@
 ###############################################################################
 # A sample file to specify all the necessary data that is needed to make use
-# of the modern blockfolio.
+# of the diversified blockfolio.
 ###############################################################################
 
 ###############################################################################
 # The symbol of the fiat currency that will be used for deposits and
 # withdrawals, e.g. EUR or USD
-# Get's ignored for now.
+# Set do USD per default for now.
 ###############################################################################
 # fiat_symbol: USD
 
@@ -21,7 +21,7 @@
 # - holdings: (optional) What assets and how much of them you currently store
 #                        at the exchange
 # 
-# Only the holdings get used for now.
+# Only the holdings get read for now.
 ###############################################################################
 fiat_exchange:
   # name: GDAX
@@ -112,7 +112,7 @@ fiat_exchange:
 # of the weights and then distribute the value of the blockfolio accordingly
 # by dividing each assets weight by the sum of all assets weights.
 # 
-# Only useing the symbol for now
+# Only using the symbol for now
 ###############################################################################
 asset_allocation:
   - symbol: BTC
