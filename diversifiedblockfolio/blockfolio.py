@@ -30,14 +30,8 @@ class Blockfolio:
                      if holding[KEY_SYMBOL] == symbol),
                     0)
 
-    def value(self):
-        holdings = self._fiat_exchange.holdings
-        if len(holdings) == 0:
-            return 0
-        ticker = self._market.ticker(limit=TICKER_LIMIT)
-        return sum(holding.get(KEY_AMOUNT, 0) *
-                   self._ticker_price(holding.get(KEY_SYMBOL), ticker)
-                   for holding in holdings)
+    # def deposit(self, amount):
+    #     return
 
     @property
     def holdings(self):
@@ -55,5 +49,11 @@ class Blockfolio:
             holdings.append(holding)
         return holdings
 
-    # def deposit(self, amount):
-    #     return
+    def value(self):
+        holdings = self._fiat_exchange.holdings
+        if len(holdings) == 0:
+            return 0
+        ticker = self._market.ticker(limit=TICKER_LIMIT)
+        return sum(holding.get(KEY_AMOUNT, 0) *
+                   self._ticker_price(holding.get(KEY_SYMBOL), ticker)
+                   for holding in holdings)

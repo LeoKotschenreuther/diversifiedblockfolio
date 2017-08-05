@@ -39,31 +39,12 @@ def mock_ticker(currency="", **kwargs):
 
 class TestBlockfolio(object):
 
+    # def test_deposit(self):
+    #     assert False
+
     def test_init_bad_asset_allocation(self, market, bad_asset_allocation):
         with pytest.raises(ValueError):
             diblo.Blockfolio(diblo.Exchange(), bad_asset_allocation, market)
-
-    @pytest.mark.parametrize(
-        'value, fiat_exchange', [
-            (0, diblo.Exchange()),
-            (0, diblo.Exchange({'holdings': []})),
-            (0, diblo.Exchange({'holdings': [
-                {'symbol': 'BTC', 'amount': 0}
-            ]})),
-            (1249.99, diblo.Exchange({'holdings': [
-                {'symbol': 'BTC', 'amount': .5}
-            ]})),
-            (1849.84, diblo.Exchange({'holdings': [
-                {'symbol': 'BTC', 'amount': 0.5},
-                {'symbol': 'ETH', 'amount': 2.5}
-            ]}))
-        ]
-    )
-    def test_value(self, monkeypatch, value, fiat_exchange, asset_allocation,
-                   market):
-        monkeypatch.setattr(market, 'ticker', mock_ticker)
-        blockfolio = diblo.Blockfolio(fiat_exchange, asset_allocation, market)
-        assert blockfolio.value() == approx(value)
 
     @pytest.mark.parametrize(
         'holdings, fiat_exchange', [
@@ -103,5 +84,24 @@ class TestBlockfolio(object):
         blockfolio = diblo.Blockfolio(fiat_exchange, asset_allocation, market)
         assert holdings_equal(blockfolio.holdings, holdings)
 
-    # def test_deposit(self):
-    #     assert False
+    @pytest.mark.parametrize(
+        'value, fiat_exchange', [
+            (0, diblo.Exchange()),
+            (0, diblo.Exchange({'holdings': []})),
+            (0, diblo.Exchange({'holdings': [
+                {'symbol': 'BTC', 'amount': 0}
+            ]})),
+            (1249.99, diblo.Exchange({'holdings': [
+                {'symbol': 'BTC', 'amount': .5}
+            ]})),
+            (1849.84, diblo.Exchange({'holdings': [
+                {'symbol': 'BTC', 'amount': 0.5},
+                {'symbol': 'ETH', 'amount': 2.5}
+            ]}))
+        ]
+    )
+    def test_value(self, monkeypatch, value, fiat_exchange, asset_allocation,
+                   market):
+        monkeypatch.setattr(market, 'ticker', mock_ticker)
+        blockfolio = diblo.Blockfolio(fiat_exchange, asset_allocation, market)
+        assert blockfolio.value() == approx(value)
