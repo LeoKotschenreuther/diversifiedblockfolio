@@ -93,8 +93,8 @@ fiat_exchange:
 #         amount: 3
 
 ###############################################################################
-# A list of all the Assets you would like to hold. Each asset should have the
-# following attributes:
+# A list of all the Assets you would like to hold. You need at least on asset.
+# Each asset should have the following attributes:
 # 
 # - symbol: The symbol of the asset that is also used on coinmarketcap,
 #           something like ETH or BTC
@@ -102,7 +102,8 @@ fiat_exchange:
 #                 use to buy the actual asset
 # - preferred_exchange: Where you usually want to trade the asset
 # - target_weight: How much weight the asset should have compared to the other
-#                  assets in your blockfolio.
+#                  assets in your blockfolio. Does not need to be set,
+#                  defaults to 1.
 # - preferred_storage: The Exchange or Wallet where you want to store your
 #                      assets
 # 
@@ -112,21 +113,21 @@ fiat_exchange:
 # of the weights and then distribute the value of the blockfolio accordingly
 # by dividing each assets weight by the sum of all assets weights.
 # 
-# Only using the symbol for now
+# Only the symbol and the target_weight get used for now
 ###############################################################################
 asset_allocation:
   - symbol: BTC
     # quote_symbol: USD
     # preferred_exchange: GDAX
-    # target_weight: 25
+    target_weight: 25
     # preferred_storage: My BTC Wallet
   - symbol: ETH
     # quote_symbol: USD
     # preferred_exchange: GDAX
-    # target_weight: 50
+    target_weight: 50
     # preferred_storage: My ETH Wallet
   - symbol: LTC
     # quote_symbol: USD
     # preferred_exchange: Poloniex
-    # target_weight: 10
+    target_weight: 10
     # preferred_storage: My ETH Wallet

@@ -5,6 +5,7 @@ from .context import diversifiedblockfolio as diblo
 from .test_utils import holdings_equal
 
 
+# values work in combination with the exchange_data fixture
 @pytest.fixture(params=[('ETH', 'EUR', 1), ('ETH', 'USD', 100)])
 def bad_buy(request):
     return request.param
@@ -19,6 +20,7 @@ def bad_exchange_data(request):
     return request.param
 
 
+# values work in combination with the exchange_data fixture
 @pytest.fixture(params=[('STRAT', 'USD', 1), ('ETH', 'USD', 1)])
 def bad_sell(request):
     return request.param

@@ -30,8 +30,9 @@ class Blockfolio:
                      if holding[KEY_SYMBOL] == symbol),
                     0)
 
-    # def deposit(self, amount):
-    #     return
+    def deposit(self, amount):
+        if amount <= 0:
+            raise ValueError("The deposit amount must be greater than zero.")
 
     @property
     def holdings(self):
