@@ -36,9 +36,9 @@ def market():
 
 def mock_ticker(currency="", **kwargs):
     return [
-        {'symbol': 'BTC', 'price_usd': '2499.98'},
-        {'symbol': 'ETH', 'price_usd': '239.94'},
-        {'symbol': 'LTC', 'price_usd': '49.57'}
+        {'symbol': 'BTC', 'price_usd': '1000'},
+        {'symbol': 'ETH', 'price_usd': '100'},
+        {'symbol': 'LTC', 'price_usd': '10'}
     ]
 
 
@@ -52,7 +52,7 @@ class TestBlockfolio(object):
 
     @pytest.mark.parametrize(
         'fiat_exchange, asset_allocation, amount, holdings', [
-            # no preexisting holdings, equal weight allocation
+            # no preexisting holdings
             (
                 diblo.Exchange(),
                 [{'symbol': 'BTC'}, {'symbol': 'ETH'}, {'symbol': 'LTC'}],
@@ -61,21 +61,7 @@ class TestBlockfolio(object):
                  {'symbol': 'ETH', 'amount': 1, 'price': 100, 'value': 100},
                  {'symbol': 'LTC', 'amount': 10, 'price': 10, 'value': 100}]
             ),
-            # no preexisting holdings, non equal weight allocation
-            (
-                diblo.Exchange(),
-                [
-                    {'symbol': 'BTC', 'target_weight': 5},
-                    {'symbol': 'ETH', 'target_weight': 3},
-                    {'symbol': 'LTC', 'target_weight': 2}
-                ],
-                500,
-                [{'symbol': 'BTC', 'amount': .25, 'price': 1000, 'value': 250},
-                 {'symbol': 'ETH', 'amount': 1.5, 'price': 100, 'value': 150},
-                 {'symbol': 'LTC', 'amount': 10, 'price': 10, 'value': 100}]
-            ),
-            # preexisting holdings, equal weight allocation,
-            # all assets get bought
+            # preexisting holdings, all assets get bought
             (
                 diblo.Exchange({'holdings': [
                     {'symbol': 'BTC', 'amount': .2},
@@ -93,31 +79,7 @@ class TestBlockfolio(object):
                      'value': 284.71}
                 ]
             ),
-            # preexisting holdings, non equal weight allocation,
-            # all assets get bought
-            (
-                diblo.Exchange({'holdings': [
-                    {'symbol': 'BTC', 'amount': .4},
-                    {'symbol': 'ETH', 'amount': 3.4982},
-                    {'symbol': 'LTC', 'amount': 10.43}
-                ]}),
-                [
-                    {'symbol': 'BTC', 'target_weight': 5},
-                    {'symbol': 'ETH', 'target_weight': 3},
-                    {'symbol': 'LTC', 'target_weight': 2}
-                ],
-                500.08,
-                [
-                    {'symbol': 'BTC', 'amount': .6771, 'price': 1000,
-                     'value': 677.1},
-                    {'symbol': 'ETH', 'amount': 4.0626, 'price': 100,
-                     'value': 406.26},
-                    {'symbol': 'LTC', 'amount': 27.084, 'price': 10,
-                     'value': 270.84}
-                ]
-            ),
-            # preexisting holdings, equal weight allocation,
-            # not all assets get bought
+            # preexisting holdings, not all assets get bought
             (
                 diblo.Exchange({'holdings': [
                     {'symbol': 'BTC', 'amount': .8},
@@ -134,34 +96,12 @@ class TestBlockfolio(object):
                     {'symbol': 'LTC', 'amount': 32.708, 'price': 10,
                      'value': 327.08}
                 ]
-            ),
-            # preexisting holdings, non equal weight allocation,
-            # not all assets get bought
-            (
-                diblo.Exchange({'holdings': [
-                    {'symbol': 'BTC', 'amount': .8},
-                    {'symbol': 'ETH', 'amount': 3.4983},
-                    {'symbol': 'LTC', 'amount': 10.43}
-                ]}),
-                [
-                    {'symbol': 'BTC', 'target_weight': 5},
-                    {'symbol': 'ETH', 'target_weight': 3},
-                    {'symbol': 'LTC', 'target_weight': 2}
-                ],
-                300.07,
-                [
-                    {'symbol': 'BTC', 'amount': .8, 'price': 1000,
-                     'value': 800},
-                    {'symbol': 'ETH', 'amount': 4.5252, 'price': 100,
-                     'value': 452.52},
-                    {'symbol': 'LTC', 'amount': 30.168, 'price': 10,
-                     'value': 301.68}
-                ]
             )
         ]
     )
     def test_deposit(self, fiat_exchange, asset_allocation, market, amount,
                      holdings, monkeypatch):
+        monkeypatch.setattr(market, 'ticker', mock_ticker)
         blockfolio = diblo.Blockfolio(fiat_exchange, asset_allocation, market)
         blockfolio.deposit(amount)
         assert holdings_equal(blockfolio.holdings, holdings)
@@ -173,27 +113,27 @@ class TestBlockfolio(object):
     @pytest.mark.parametrize(
         'holdings, fiat_exchange', [
             (
-                [{'symbol': 'BTC', 'amount': 0, 'price': 2499.98, 'value': 0},
-                 {'symbol': 'ETH', 'amount': 0, 'price': 239.94, 'value': 0},
-                 {'symbol': 'LTC', 'amount': 0, 'price': 49.57, 'value': 0}],
+                [{'symbol': 'BTC', 'amount': 0, 'price': 1000, 'value': 0},
+                 {'symbol': 'ETH', 'amount': 0, 'price': 100, 'value': 0},
+                 {'symbol': 'LTC', 'amount': 0, 'price': 10, 'value': 0}],
                 diblo.Exchange()
             ),
             (
-                [{'symbol': 'BTC', 'amount': 0, 'price': 2499.98, 'value': 0},
-                 {'symbol': 'ETH', 'amount': 3.4982, 'price': 239.94,
-                    'value': 839.358108},
-                 {'symbol': 'LTC', 'amount': 0, 'price': 49.57, 'value': 0}],
+                [{'symbol': 'BTC', 'amount': 0, 'price': 1000, 'value': 0},
+                 {'symbol': 'ETH', 'amount': 3.4982, 'price': 100,
+                    'value': 349.82},
+                 {'symbol': 'LTC', 'amount': 0, 'price': 10, 'value': 0}],
                 diblo.Exchange({'holdings': [
                     {'symbol': 'ETH', 'amount': 3.4982}
                 ]})
             ),
             (
-                [{'symbol': 'BTC', 'amount': .4, 'price': 2499.98,
-                    'value': 999.992},
-                 {'symbol': 'ETH', 'amount': 3.4982, 'price': 239.94,
-                    'value': 839.358108},
-                 {'symbol': 'LTC', 'amount': 10.43, 'price': 49.57,
-                    'value': 517.0151}],
+                [{'symbol': 'BTC', 'amount': .4, 'price': 1000,
+                    'value': 400},
+                 {'symbol': 'ETH', 'amount': 3.4982, 'price': 100,
+                    'value': 349.82},
+                 {'symbol': 'LTC', 'amount': 10.43, 'price': 10,
+                    'value': 104.3}],
                 diblo.Exchange({'holdings': [
                     {'symbol': 'BTC', 'amount': .4},
                     {'symbol': 'ETH', 'amount': 3.4982},
@@ -215,10 +155,10 @@ class TestBlockfolio(object):
             (0, diblo.Exchange({'holdings': [
                 {'symbol': 'BTC', 'amount': 0}
             ]})),
-            (1249.99, diblo.Exchange({'holdings': [
+            (500, diblo.Exchange({'holdings': [
                 {'symbol': 'BTC', 'amount': .5}
             ]})),
-            (1849.84, diblo.Exchange({'holdings': [
+            (750, diblo.Exchange({'holdings': [
                 {'symbol': 'BTC', 'amount': 0.5},
                 {'symbol': 'ETH', 'amount': 2.5}
             ]}))
