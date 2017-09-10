@@ -3,7 +3,9 @@ import pytest
 from pytest import approx
 
 from .context import diversifiedblockfolio as diblo
-from .test_utils import holdings_equal
+from .test_utils import buys_equal, holdings_equal
+
+buy_calls = []
 
 
 @pytest.fixture(params=[
@@ -34,6 +36,11 @@ def market():
     return coinmarketcap.Market()
 
 
+def mock_buy(buy_symbol, give_symbol, give_amount):
+    buy_calls.append((buy_symbol, give_symbol, give_amount))
+    return
+
+
 def mock_ticker(currency="", **kwargs):
     return [
         {'symbol': 'BTC', 'price_usd': '1000'},
@@ -51,19 +58,20 @@ class TestBlockfolio(object):
             blockfolio.deposit(bad_deposit)
 
     @pytest.mark.parametrize(
-        'fiat_exchange, asset_allocation, amount, holdings', [
+        'fiat_exchange, asset_allocation, amount, buys', [
             # no preexisting holdings
             (
-                diblo.Exchange(),
+                diblo.Exchange({'holdings': [
+                    {'symbol': 'USD', 'amount': 300}
+                ]}),
                 [{'symbol': 'BTC'}, {'symbol': 'ETH'}, {'symbol': 'LTC'}],
                 300,
-                [{'symbol': 'BTC', 'amount': .1, 'price': 1000, 'value': 100},
-                 {'symbol': 'ETH', 'amount': 1, 'price': 100, 'value': 100},
-                 {'symbol': 'LTC', 'amount': 10, 'price': 10, 'value': 100}]
+                [('BTC', 'USD', 100), ('ETH', 'USD', 100), ('LTC', 'USD', 100)]
             ),
             # preexisting holdings, all assets get bought
             (
                 diblo.Exchange({'holdings': [
+                    {'symbol': 'USD', 'amount': 300.01},
                     {'symbol': 'BTC', 'amount': .2},
                     {'symbol': 'ETH', 'amount': 2.4982},
                     {'symbol': 'LTC', 'amount': 10.43}
@@ -71,17 +79,16 @@ class TestBlockfolio(object):
                 [{'symbol': 'BTC'}, {'symbol': 'ETH'}, {'symbol': 'LTC'}],
                 300.01,
                 [
-                    {'symbol': 'BTC', 'amount': .28471, 'price': 1000,
-                     'value': 284.71},
-                    {'symbol': 'ETH', 'amount': 2.8471, 'price': 100,
-                     'value': 284.71},
-                    {'symbol': 'LTC', 'amount': 28.471, 'price': 10,
-                     'value': 284.71}
+                    ('BTC', 'USD', 84.71),
+                    ('ETH', 'USD', 34.89),
+                    ('LTC', 'USD', 180.41)
                 ]
+
             ),
             # preexisting holdings, not all assets get bought
             (
                 diblo.Exchange({'holdings': [
+                    {'symbol': 'USD', 'amount': 300.04},
                     {'symbol': 'BTC', 'amount': .8},
                     {'symbol': 'ETH', 'amount': 2.4982},
                     {'symbol': 'LTC', 'amount': 10.43}
@@ -89,22 +96,21 @@ class TestBlockfolio(object):
                 [{'symbol': 'BTC'}, {'symbol': 'ETH'}, {'symbol': 'LTC'}],
                 300.04,
                 [
-                    {'symbol': 'BTC', 'amount': .8, 'price': 1000,
-                     'value': 800},
-                    {'symbol': 'ETH', 'amount': 3.2708, 'price': 100,
-                     'value': 327.08},
-                    {'symbol': 'LTC', 'amount': 32.708, 'price': 10,
-                     'value': 327.08}
+                    ('ETH', 'USD', 77.26),
+                    ('LTC', 'USD', 222.78)
                 ]
             )
         ]
     )
     def test_deposit(self, fiat_exchange, asset_allocation, market, amount,
-                     holdings, monkeypatch):
+                     buys, monkeypatch):
         monkeypatch.setattr(market, 'ticker', mock_ticker)
+        monkeypatch.setattr(fiat_exchange, 'buy', mock_buy)
+        global buy_calls
+        buy_calls = []
         blockfolio = diblo.Blockfolio(fiat_exchange, asset_allocation, market)
         blockfolio.deposit(amount)
-        assert holdings_equal(blockfolio.holdings, holdings)
+        assert buys_equal(buy_calls, buys)
 
     def test_init_bad_asset_allocation(self, bad_asset_allocation, market):
         with pytest.raises(ValueError):

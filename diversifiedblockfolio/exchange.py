@@ -30,7 +30,7 @@ class Exchange(object):
 
     def _exchange(self, want_symbol, give_symbol, amount, side):
         if not self._enough_available(give_symbol, amount):
-            raise ValueError("There is not enough sypply of {}."
+            raise ValueError("There is not enough supply of {}."
                              .format(give_symbol))
         if side == SIDE_SELL:
             print("Go ahead and sell {} {} for {}."

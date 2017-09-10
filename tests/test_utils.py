@@ -18,3 +18,19 @@ def holdings_equal(A, B):
                     holdingA[key] != holdingB[key]):
                 return False
     return True
+
+
+def buys_equal(A, B):
+    if len(A) != len(B):
+        return False
+    A.sort()
+    B.sort()
+    for index, buyA in enumerate(A):
+        buyB = B[index]
+        if buyA[0] != buyB[0]:
+            return False
+        if buyA[1] != buyB[1]:
+            return False
+        if buyA[2] != approx(buyB[2]):
+            return False
+    return True
